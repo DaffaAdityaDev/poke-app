@@ -212,3 +212,29 @@ export const NextUILogo: React.FC<IconSvgProps> = (props) => {
     </svg>
   );
 };
+
+export const ChevronDown = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}: IconSvgProps) => (
+  <svg
+    aria-hidden="true"
+    fill="none"
+    focusable="false"
+    height={size || height}
+    role="presentation"
+    viewBox="0 0 24 24"
+    width={size || width}
+    {...props}
+  >
+    <path
+      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+    />
+  </svg>
+);

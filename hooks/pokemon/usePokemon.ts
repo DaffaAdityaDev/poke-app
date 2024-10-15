@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 
-import { usePagination } from "./usePagination";
-import { useSearchQuery } from "./search/useSearchQuery";
-import { usePokemonList } from "./pokemon/usePokemonList";
-import { usePokemonDetails } from "./pokemon/usePokemonDetails";
-import { useErrorHandling } from "./error/useErrorHandling";
+import { useSearchQuery } from "../search/useSearchQuery";
+import { usePagination } from "../usePagination";
+import { useErrorHandling } from "../error/useErrorHandling";
+
+import { usePokemonList } from "./usePokemonList";
+import { usePokemonDetails } from "./usePokemonDetails";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -27,10 +28,9 @@ export function usePokemon() {
 
   const isLoading = !listData || !pokemonDetails;
 
-  // Update total pages when listData changes
   useEffect(() => {
     if (listData) {
-      handlePageChange(currentPage, Math.ceil(listData.count / ITEMS_PER_PAGE));
+      handlePageChange(currentPage, listData.count);
     }
   }, [listData, handlePageChange, currentPage]);
 
