@@ -9,15 +9,20 @@ import { Pagination } from "@nextui-org/pagination";
 import { usePokemonAbilities } from "@/hooks/pokemon/usePokemonAbilities";
 
 const PokemonAbilities: React.FC = () => {
+  // State for search query and pagination
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Custom hook to fetch Pokemon abilities
   const { abilities, isLoading, error, totalPages, totalAbilities } =
     usePokemonAbilities(searchQuery, currentPage);
 
+  // Reset to first page when search query changes
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery]);
 
+  // Handlers for search and pagination
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
   };
@@ -26,6 +31,7 @@ const PokemonAbilities: React.FC = () => {
     setCurrentPage(page);
   };
 
+  // Render different content based on loading/error states
   const renderContent = () => {
     if (isLoading) {
       return (

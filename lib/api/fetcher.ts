@@ -1,8 +1,10 @@
 import { API_BASE_URL } from "@/utils/api";
 
+// Generic fetcher function that can handle single or multiple URLs
 export const fetcher = async <T>(
   input: RequestInfo | RequestInfo[],
 ): Promise<T> => {
+  // Helper function to fetch data
   const fetchSingle = async (url: string) => {
     const fullUrl = url.startsWith("http") ? url : `${API_BASE_URL}${url}`;
     const res = await fetch(fullUrl);

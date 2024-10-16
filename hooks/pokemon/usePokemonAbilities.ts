@@ -10,11 +10,13 @@ export const usePokemonAbilities = (
   searchQuery: string,
   currentPage: number,
 ) => {
+  // State variables for managing abilities data, loading state, and errors
   const [abilities, setAbilities] = useState<PokemonAbility[]>([]);
   const [totalAbilities, setTotalAbilities] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<ApiError | null>(null);
 
+  // Function to fetch abilities from the API
   const fetchAbilities = useCallback(async (page: number) => {
     const offset = (page - 1) * ITEMS_PER_PAGE;
     const url = `/ability?limit=${ITEMS_PER_PAGE}&offset=${offset}`;
@@ -55,6 +57,7 @@ export const usePokemonAbilities = (
     }
   }, []);
 
+  // Effect to load abilities when the page changes
   useEffect(() => {
     const loadAbilities = async () => {
       setIsLoading(true);
@@ -67,18 +70,21 @@ export const usePokemonAbilities = (
     loadAbilities();
   }, [fetchAbilities, currentPage]);
 
+  // Memoized filtered abilities based on search query
   const filteredAbilities = useMemo(() => {
     return abilities.filter((ability) =>
       ability.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [abilities, searchQuery]);
 
+  // Calculate total filtered abilities and total pages
   const totalFilteredAbilities = useMemo(() => {
     return searchQuery ? filteredAbilities.length : totalAbilities;
   }, [searchQuery, filteredAbilities, totalAbilities]);
 
   const totalPages = Math.ceil(totalFilteredAbilities / ITEMS_PER_PAGE);
 
+  // Return the hook's output
   return {
     abilities: filteredAbilities,
     isLoading,

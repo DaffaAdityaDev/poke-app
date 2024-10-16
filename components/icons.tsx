@@ -1,3 +1,8 @@
+// This file contains a collection of SVG icons used throughout the application.
+// Each icon is exported as a React component, allowing for easy customization
+// of size, color, and other properties. The icons include various UI elements
+// such as social media logos, navigation arrows, and theme toggles.
+
 import * as React from "react";
 
 import { IconSvgProps } from "@/types";

@@ -13,9 +13,11 @@ interface PokemonEvolutionChainProps {
 const PokemonEvolutionChain: React.FC<PokemonEvolutionChainProps> = ({
   chain,
 }) => {
+  // Render a single evolution stage
   const renderEvolutionStage = (stage: EvolutionChain) => {
     return (
       <div className="flex flex-col items-center justify-center h-full">
+        {/* Pokemon image card */}
         <Card className="w-32 h-32 sm:w-40 sm:h-40 hover:shadow-lg transition-shadow duration-200">
           <CardBody className="flex items-center justify-center p-2">
             <Image
@@ -27,10 +29,12 @@ const PokemonEvolutionChain: React.FC<PokemonEvolutionChainProps> = ({
             />
           </CardBody>
         </Card>
+        {/* Pokemon name */}
         <p className="mt-2 text-center capitalize text-sm sm:text-base">
           {stage.species.name}
         </p>
 
+        {/* Evolution trigger chip */}
         <Chip
           className={`mt-1 text-xs sm:text-sm ${
             stage?.evolution_details[0]?.trigger?.name === "level-up"
@@ -52,12 +56,14 @@ const PokemonEvolutionChain: React.FC<PokemonEvolutionChainProps> = ({
     );
   };
 
+  // Recursively render the evolution chain
   const renderEvolutionChain = (chain: EvolutionChain) => {
     return (
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
         {renderEvolutionStage(chain)}
         {chain.evolves_to.length > 0 && (
           <>
+            {/* Arrow or line between evolution stages */}
             <ArrowRightIcon className="hidden sm:block mx-2 text-2xl" />
             <div className="sm:hidden w-0.5 h-8 bg-gray-300" />
             {renderEvolutionChain(chain.evolves_to[0])}

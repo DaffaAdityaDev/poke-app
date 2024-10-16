@@ -10,6 +10,7 @@ import { usePokemonDetails } from "./usePokemonDetails";
 const ITEMS_PER_PAGE = 20;
 
 export function usePokemon() {
+  // Custom hooks for managing search, pagination, and data fetching
   const { searchQuery, handleSearch, resetSearch } = useSearchQuery();
   const { currentPage, totalPages, handlePageChange } = usePagination(
     0,
@@ -20,6 +21,8 @@ export function usePokemon() {
     listData,
     searchQuery,
   );
+
+  // Error handling hook
   const { getErrorMessage } = useErrorHandling(
     listError ? { name: "ListError", message: listError.message } : null,
     detailsError
@@ -30,6 +33,7 @@ export function usePokemon() {
 
   const isLoading = !listData || !pokemonDetails;
 
+  // Adjust total pages when searching
   const effectiveTotalPages = useMemo(() => {
     if (searchQuery) {
       return 1; // When searching, we only have one page of results
@@ -38,18 +42,21 @@ export function usePokemon() {
     return totalPages;
   }, [searchQuery, totalPages]);
 
+  // Update pagination when list data changes
   useEffect(() => {
     if (listData) {
       handlePageChange(currentPage, listData.count);
     }
   }, [listData, handlePageChange, currentPage]);
 
+  // Reset to first page when searching
   useEffect(() => {
     if (searchQuery) {
-      handlePageChange(1, 1); // Reset to first page when searching
+      handlePageChange(1, 1);
     }
   }, [searchQuery, handlePageChange]);
 
+  // Return all necessary data and functions for the Pokemon list view
   return {
     pokemonList: pokemonDetails || [],
     isLoading,

@@ -10,9 +10,11 @@ import { usePokemonDetails } from "@/hooks/pokemon/usePokemonDetails";
 import { PokemonDetails } from "@/types/pokemon";
 
 const PokemonCompare: React.FC = () => {
+  // State for selected Pokémon names
   const [selectedPokemon1, setSelectedPokemon1] = useState<string | null>(null);
   const [selectedPokemon2, setSelectedPokemon2] = useState<string | null>(null);
 
+  // Custom hooks for searching Pokémon
   const {
     inputValue: input1,
     setInputValue: setInput1,
@@ -28,6 +30,7 @@ const PokemonCompare: React.FC = () => {
     error: searchError2,
   } = useSearchPokemon();
 
+  // Custom hooks for fetching Pokémon details
   const { pokemonDetails: details1, detailsError: error1 } = usePokemonDetails(
     selectedPokemon1 ? { results: [{ name: selectedPokemon1 }] } : null,
     selectedPokemon1 || "",
@@ -37,6 +40,7 @@ const PokemonCompare: React.FC = () => {
     selectedPokemon2 || "",
   );
 
+  // Function to render Pokémon details or appropriate messages
   const renderPokemonDetails = useCallback(
     (pokemon: PokemonDetails | null, error: any, isSelected: boolean) => {
       if (!isSelected) {
@@ -60,6 +64,7 @@ const PokemonCompare: React.FC = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
+      {/* Autocomplete inputs for selecting Pokémon */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <Autocomplete
           className="w-full"
@@ -95,14 +100,8 @@ const PokemonCompare: React.FC = () => {
           ))}
         </Autocomplete>
       </div>
-      {/* <Button
-        color="primary"
-        onClick={handleCompare}
-        disabled={isCompareDisabled}
-        className="mb-8"
-      >
-        Compare
-      </Button> */}
+      
+      {/* Display Pokémon comparison cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {isLoading1 || isLoading2 ? (
           <Spinner color="primary" label="Loading Pokémon data..." />

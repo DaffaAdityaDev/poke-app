@@ -19,7 +19,9 @@ interface PokemonCompareCardProps {
   pokemon: PokemonDetails;
 }
 
+// Component for displaying detailed Pokemon information in a card format
 const PokemonCompareCard: React.FC<PokemonCompareCardProps> = ({ pokemon }) => {
+  // Helper function to get the appropriate icon for each stat
   const getStatIcon = (statName: string) => {
     switch (statName) {
       case "hp":
@@ -39,6 +41,7 @@ const PokemonCompareCard: React.FC<PokemonCompareCardProps> = ({ pokemon }) => {
     }
   };
 
+  // Helper function to get the appropriate color for each stat
   const getStatColor = (statName: string) => {
     switch (statName) {
       case "hp":
@@ -60,12 +63,15 @@ const PokemonCompareCard: React.FC<PokemonCompareCardProps> = ({ pokemon }) => {
 
   return (
     <div className="flex flex-col items-center">
+      {/* Pokemon name and image */}
       <h2 className="text-2xl font-bold mb-4 capitalize">{pokemon.name}</h2>
       <img
         alt={pokemon.name}
         className="mb-4 w-48 h-48 object-contain"
         src={pokemon.sprites.front_default}
       />
+
+      {/* Stats section */}
       <div className="w-full">
         <h3 className="text-xl font-semibold mb-2">Stats</h3>
         {pokemon.stats?.map((stat) => (
@@ -101,6 +107,8 @@ const PokemonCompareCard: React.FC<PokemonCompareCardProps> = ({ pokemon }) => {
           </Tooltip>
         ))}
       </div>
+
+      {/* Types section */}
       <div className="w-full mt-4">
         <h3 className="text-xl font-semibold mb-2">Types</h3>
         <div className="flex gap-2">
@@ -111,6 +119,8 @@ const PokemonCompareCard: React.FC<PokemonCompareCardProps> = ({ pokemon }) => {
           ))}
         </div>
       </div>
+
+      {/* Abilities section */}
       <div className="w-full mt-4">
         <h3 className="text-xl font-semibold mb-2">Abilities</h3>
         <div className="flex flex-wrap gap-2">
@@ -130,6 +140,8 @@ const PokemonCompareCard: React.FC<PokemonCompareCardProps> = ({ pokemon }) => {
           ))}
         </div>
       </div>
+
+      {/* Moves section */}
       <div className="w-full mt-4">
         <h3 className="text-xl font-semibold mb-2">Moves</h3>
         <ScrollShadow className="h-32">
@@ -142,6 +154,8 @@ const PokemonCompareCard: React.FC<PokemonCompareCardProps> = ({ pokemon }) => {
           </div>
         </ScrollShadow>
       </div>
+
+      {/* Additional information (height and weight) */}
       <div className="w-full mt-4 flex items-center">
         <InfoIcon className="mr-2" />
         <span className="text-sm">

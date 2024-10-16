@@ -4,6 +4,7 @@ import { Button } from "@nextui-org/button";
 
 import { useAutocomplete } from "@/hooks/search/useAutocomplete";
 
+// Props for the SearchBar component
 interface SearchBarProps {
   onSearch: (query: string) => void;
   onReset: () => void;
@@ -15,13 +16,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onReset,
   currentSearch,
 }) => {
+  // Custom hook for autocomplete functionality
   const { inputValue, setInputValue, suggestions, isLoading, error } =
     useAutocomplete(currentSearch);
 
+  // Sync input value with current search
   useEffect(() => {
     setInputValue(currentSearch);
   }, [currentSearch, setInputValue]);
 
+  // Handle selection from autocomplete
   const handleSelectionChange = useCallback(
     (key: React.Key | null) => {
       if (key !== null) {
@@ -31,6 +35,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     [onSearch],
   );
 
+  // Handle input changes and reset if empty
   const handleInputChange = useCallback(
     (value: string) => {
       setInputValue(value);
@@ -43,6 +48,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div className="flex items-center gap-2">
+      {/* Autocomplete input for Pokémon search */}
       <Autocomplete
         className="w-full"
         errorMessage={error}
@@ -53,6 +59,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         onInputChange={handleInputChange}
         onSelectionChange={handleSelectionChange}
       >
+        {/* Render autocomplete suggestions */}
         {suggestions.map((pokemon) => (
           <AutocompleteItem key={pokemon.name} textValue={pokemon.name}>
             <div className="flex items-center gap-2">
@@ -63,6 +70,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           </AutocompleteItem>
         ))}
       </Autocomplete>
+      {/* Clear button to reset search */}
       <Button color="primary" onClick={onReset}>
         Clear
       </Button>

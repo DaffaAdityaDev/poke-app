@@ -9,11 +9,15 @@ export default function Document() {
       <Head />
       <body
         className={clsx(
+          // Apply base styles to the body
           "min-h-screen bg-background font-sans antialiased",
+          // Include custom font variable
           fontSans.variable,
         )}
       >
+        {/* Main content of the application */}
         <Main />
+        {/* Next.js scripts */}
         <NextScript />
       </body>
     </Html>

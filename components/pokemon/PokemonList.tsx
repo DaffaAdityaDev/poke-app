@@ -12,6 +12,7 @@ import { usePokemon } from "@/hooks/pokemon/usePokemon";
 import { PokemonDetails } from "@/types/pokemon";
 
 const PokemonList: React.FC = () => {
+  // We're using a custom hook to manage all our Pokémon data and interactions
   const {
     pokemonList,
     isLoading,
@@ -24,21 +25,25 @@ const PokemonList: React.FC = () => {
     resetSearch,
   } = usePokemon();
 
+  // State for managing the selected Pokémon and modal visibility
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(
     null,
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // When a Pokémon card is clicked, we show its details in a modal
   const handleCardClick = (pokemon: PokemonDetails) => {
     setSelectedPokemon(pokemon);
     setIsModalOpen(true);
   };
 
+  // Close the modal and reset the selected Pokémon
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedPokemon(null);
   };
 
+  // Show a loading spinner while we're fetching data
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -51,6 +56,7 @@ const PokemonList: React.FC = () => {
     );
   }
 
+  // If there's an error, we show an error message with a retry button
   if (error) {
     return (
       <Card className="max-w-md mx-auto">
@@ -67,11 +73,13 @@ const PokemonList: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4">
+      {/* Search bar for finding specific Pokémon */}
       <SearchBar
         currentSearch={searchQuery}
         onReset={resetSearch}
         onSearch={handleSearch}
       />
+      {/* If no Pokémon are found, we show a message */}
       {pokemonList?.length === 0 || !pokemonList ? (
         <Card className="max-w-md mx-auto mt-8">
           <CardBody>
@@ -85,6 +93,7 @@ const PokemonList: React.FC = () => {
         </Card>
       ) : (
         <>
+          {/* Grid layout for displaying Pokémon cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
             {pokemonList.map((pokemon) => (
               <PokemonCard
@@ -94,6 +103,7 @@ const PokemonList: React.FC = () => {
               />
             ))}
           </div>
+          {/* Pagination controls */}
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -101,6 +111,7 @@ const PokemonList: React.FC = () => {
           />
         </>
       )}
+      {/* Modal for displaying detailed Pokémon information */}
       <PokemonModal
         isOpen={isModalOpen}
         pokemon={selectedPokemon}

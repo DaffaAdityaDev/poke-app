@@ -22,6 +22,7 @@ import {
 } from "@/components/icons";
 import { PokemonDetails } from "@/types/pokemon";
 
+// Component props definition
 interface PokemonModalProps {
   pokemon: PokemonDetails | null;
   isOpen: boolean;
@@ -35,6 +36,7 @@ export const PokemonModal: React.FC<PokemonModalProps> = ({
 }) => {
   if (!pokemon) return null;
 
+  // Helper function to get the appropriate icon for each stat
   const getStatIcon = (statName: string) => {
     switch (statName) {
       case "hp":
@@ -54,6 +56,7 @@ export const PokemonModal: React.FC<PokemonModalProps> = ({
     }
   };
 
+  // Helper function to get the color for each stat
   const getStatColor = (statName: string) => {
     switch (statName) {
       case "hp":
@@ -73,6 +76,7 @@ export const PokemonModal: React.FC<PokemonModalProps> = ({
     }
   };
 
+  // Function to render the first 10 moves of the Pokemon
   const renderMoves = () => {
     if (!pokemon.moves || pokemon.moves.length === 0) return null;
 

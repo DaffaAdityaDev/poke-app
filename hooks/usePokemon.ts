@@ -9,6 +9,7 @@ import { useErrorHandling } from "./error/useErrorHandling";
 const ITEMS_PER_PAGE = 20;
 
 export function usePokemon() {
+  // Custom hooks for managing search, pagination, and Pokemon data
   const { searchQuery, handleSearch, resetSearch } = useSearchQuery();
   const { currentPage, totalPages, handlePageChange } = usePagination(
     0,
@@ -19,6 +20,8 @@ export function usePokemon() {
     listData,
     searchQuery,
   );
+
+  // Error handling hook
   const { getErrorMessage } = useErrorHandling(
     listError ? { name: "ListError", message: listError.message } : null,
     detailsError
@@ -36,6 +39,7 @@ export function usePokemon() {
     }
   }, [listData, handlePageChange, currentPage]);
 
+  // Return all necessary data and functions for the Pokemon list view
   return {
     pokemonList: pokemonDetails || [],
     isLoading,

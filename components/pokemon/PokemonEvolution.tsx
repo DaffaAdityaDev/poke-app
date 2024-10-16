@@ -10,9 +10,11 @@ import useSearchPokemon from "@/hooks/search/useSearchPokemon";
 import { usePokemonEvolution } from "@/hooks/pokemon/usePokemonEvolution";
 
 const PokemonEvolution: React.FC = () => {
+  // State for selected Pokémon and error handling
   const [selectedPokemon, setSelectedPokemon] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Custom hook for Pokémon search functionality
   const {
     inputValue,
     setInputValue,
@@ -21,12 +23,14 @@ const PokemonEvolution: React.FC = () => {
     error: searchError,
   } = useSearchPokemon();
 
+  // Custom hook for fetching Pokémon evolution data
   const {
     evolutionChain,
     isLoading: isEvolutionLoading,
     error: evolutionError,
   } = usePokemonEvolution(selectedPokemon);
 
+  // Handler for search submission
   const handleSearch = (value: string) => {
     setError(null);
     if (!value) {
@@ -37,12 +41,14 @@ const PokemonEvolution: React.FC = () => {
     setSelectedPokemon(value);
   };
 
+  // Handler for clearing the search
   const handleClear = () => {
     setError(null);
     setSelectedPokemon(null);
     setInputValue("");
   };
 
+  // Function to render the appropriate content based on the current state
   const renderContent = () => {
     if (isEvolutionLoading) {
       return (
@@ -121,6 +127,7 @@ const PokemonEvolution: React.FC = () => {
         </CardBody>
       </Card>
 
+      {/* Render evolution chain or prompt message */}
       {selectedPokemon ? (
         renderContent()
       ) : (

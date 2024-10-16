@@ -15,9 +15,12 @@ import { usePokemonTypes } from "@/hooks/pokemon/usePokemonTypes";
 import { PokemonType } from "@/types/pokemon";
 
 const PokemonTypes: React.FC = () => {
+  // Custom hook to fetch Pokemon types
   const { types, isLoading, error } = usePokemonTypes();
+  // State to track selected types 
   const [selectedTypes, setSelectedTypes] = useState<any>([]);
 
+  // Handler for selecting/deselecting types
   const handleTypeSelect = (type: PokemonType) => {
     if (selectedTypes.includes(type)) {
       setSelectedTypes(selectedTypes.filter((t: PokemonType) => t !== type));
@@ -26,6 +29,7 @@ const PokemonTypes: React.FC = () => {
     }
   };
 
+  // Helper function to render damage relations for a type
   const renderDamageRelations = (type: PokemonType, relation: string) => {
     const relations =
       type.damage_relations?.[relation as keyof typeof type.damage_relations] ??
@@ -38,11 +42,13 @@ const PokemonTypes: React.FC = () => {
     ));
   };
 
+  // Loading and error states
   if (isLoading) return <Spinner label="Loading types..." />;
   if (error) return <p>Error loading types. Please try again later.</p>;
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4">
+      {/* Render selectable type chips */}
       <div className="flex flex-wrap gap-2 mb-8 justify-center">
         {types.map((type) => (
           <Chip
@@ -55,11 +61,14 @@ const PokemonTypes: React.FC = () => {
           </Chip>
         ))}
       </div>
+
+      {/* Render comparison table if types are selected */}
       {selectedTypes.length > 0 ? (
         <Card>
           <CardBody>
             <div className="overflow-x-auto">
               <Table aria-label="Type comparison table" className="min-w-full">
+                {/* Table header */}
                 <TableHeader>
                   <TableColumn>Property</TableColumn>
                   {selectedTypes.map((type: any) => (
@@ -68,6 +77,7 @@ const PokemonTypes: React.FC = () => {
                     </TableColumn>
                   ))}
                 </TableHeader>
+                {/* Table body */}
                 <TableBody>
                   {[
                     "double_damage_from",
@@ -99,6 +109,7 @@ const PokemonTypes: React.FC = () => {
           </CardBody>
         </Card>
       ) : (
+        // Prompt to select types if none are selected
         <p className="text-center">
           Select up to two types to compare their damage relations.
         </p>
