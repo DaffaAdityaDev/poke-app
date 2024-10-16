@@ -1,13 +1,14 @@
-import '@testing-library/jest-dom';
+/* eslint-disable prettier/prettier */
+import "@testing-library/jest-dom";
 
 // Mock SWR
-jest.mock('swr', () => ({
+jest.mock("swr", () => ({
   __esModule: true,
   default: jest.fn(),
 }));
 
 // Mock Next.js router
-jest.mock('next/router', () => ({
+jest.mock("next/router", () => ({
   useRouter: () => ({
     push: jest.fn(),
   }),

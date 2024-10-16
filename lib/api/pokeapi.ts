@@ -1,6 +1,6 @@
 import { fetcher } from "./fetcher";
-import { API_BASE_URL } from "@/utils/api";
 
+import { API_BASE_URL } from "@/utils/api";
 import {
   PokemonListResponse,
   PokemonDetails,

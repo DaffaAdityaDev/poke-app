@@ -4,7 +4,6 @@ import DefaultLayout from "@/layouts/default";
 import PokemonList from "@/components/pokemon/PokemonList";
 import { Head } from "@/components/Head";
 
-
 const IndexPage: NextPage = () => {
   return (
     // rovides a consistent layout structure for the page

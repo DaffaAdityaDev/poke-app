@@ -5,7 +5,6 @@ import DefaultLayout from "@/layouts/default";
 import PokemonTypes from "@/components/pokemon/PokemonTypes";
 import { Head } from "@/components/Head";
 
-
 const TypesPage: NextPage = () => {
   return (
     <DefaultLayout>

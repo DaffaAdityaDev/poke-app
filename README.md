@@ -27,7 +27,7 @@ To get started with this project, follow these steps:
 
 3. Create a `.env` file in the root directory and add the following:
    ```bash
-   NEXT_PUBLIC_POKE_API_BASE_URL=YOUR_POKE_API_BASE_URL
+   NEXT_PUBLIC_POKE_API_BASE_URL=YOUR_POKE_API_BASE_URL (check .env.example and replace with your own API base url or visit https://pokeapi.co/docs/v2)
    ```
 
 4. Run the development server:

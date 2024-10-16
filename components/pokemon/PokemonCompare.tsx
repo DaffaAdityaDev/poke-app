@@ -100,7 +100,7 @@ const PokemonCompare: React.FC = () => {
           ))}
         </Autocomplete>
       </div>
-      
+
       {/* Display Pokémon comparison cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {isLoading1 || isLoading2 ? (

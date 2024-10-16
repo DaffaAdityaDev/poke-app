@@ -21,9 +21,11 @@ export const usePokemonTypes = () => {
         typesData.results.map(async (type) => {
           try {
             const details = await getPokemonTypeDetails(type.name);
+
             return { ...type, ...details };
           } catch (err) {
             console.error(`Error fetching details for ${type.name}:`, err);
+
             return { ...type, damage_relations: {} };
           }
         }),

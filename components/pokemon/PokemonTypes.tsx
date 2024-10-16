@@ -17,7 +17,7 @@ import { PokemonType } from "@/types/pokemon";
 const PokemonTypes: React.FC = () => {
   // Custom hook to fetch Pokemon types
   const { types, isLoading, error } = usePokemonTypes();
-  // State to track selected types 
+  // State to track selected types
   const [selectedTypes, setSelectedTypes] = useState<any>([]);
 
   // Handler for selecting/deselecting types

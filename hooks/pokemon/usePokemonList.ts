@@ -19,6 +19,7 @@ export const usePokemonList = (currentPage: number, searchQuery: string) => {
       // Error handling for API requests
       onError: (error) => {
         console.error("API error:", error);
+
         return error instanceof Error
           ? { message: error.message }
           : { message: "An unknown error occurred" };
