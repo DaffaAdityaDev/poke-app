@@ -11,7 +11,6 @@ import { Progress } from "@nextui-org/progress";
 import { Tooltip } from "@nextui-org/tooltip";
 import { Chip } from "@nextui-org/chip";
 
-import { ChevronRightIcon } from "@/components/icons";
 import {
   HeartIcon,
   FlashIcon,
@@ -19,6 +18,7 @@ import {
   SwordIcon,
   SpeedIcon,
   TargetIcon,
+  InfoIcon,
 } from "@/components/icons";
 import { PokemonDetails } from "@/types/pokemon";
 
@@ -57,52 +57,20 @@ export const PokemonModal: React.FC<PokemonModalProps> = ({
   const getStatColor = (statName: string) => {
     switch (statName) {
       case "hp":
-        return "bg-gradient-to-r from-red-300 to-red-500";
+        return "danger";
       case "attack":
-        return "bg-gradient-to-r from-orange-300 to-orange-500";
+        return "warning";
       case "defense":
-        return "bg-gradient-to-r from-yellow-300 to-yellow-500";
+        return "success";
       case "special-attack":
-        return "bg-gradient-to-r from-blue-300 to-blue-500";
+        return "secondary";
       case "special-defense":
-        return "bg-gradient-to-r from-green-300 to-green-500";
+        return "primary";
       case "speed":
-        return "bg-gradient-to-r from-purple-300 to-purple-500";
+        return "info";
       default:
-        return "bg-gradient-to-r from-gray-300 to-gray-500";
+        return "default";
     }
-  };
-
-  const renderEvolutionChain = () => {
-    if (!pokemon.evolution_chain) return null;
-
-    const chain = pokemon.evolution_chain.chain;
-    const evolutions: string[] = [];
-
-    const getEvolutions = (chain: any) => {
-      evolutions.push(chain.species.name);
-      if (chain.evolves_to.length > 0) {
-        getEvolutions(chain.evolves_to[0]);
-      }
-    };
-
-    getEvolutions(chain);
-
-    return (
-      <div className="mt-4">
-        <h3 className="text-lg font-semibold mb-2">Evolution Chain</h3>
-        <div className="flex flex-wrap gap-2">
-          {evolutions.map((name, index) => (
-            <Chip key={name} color="primary">
-              {name}
-              {index < evolutions.length - 1 && (
-                <ChevronRightIcon className="w-4 h-4 ml-1" />
-              )}
-            </Chip>
-          ))}
-        </div>
-      </div>
-    );
   };
 
   const renderMoves = () => {
@@ -112,8 +80,8 @@ export const PokemonModal: React.FC<PokemonModalProps> = ({
       <div className="mt-4 w-full">
         <h3 className="text-lg font-semibold mb-2">Moves</h3>
         <div className="flex flex-wrap gap-2">
-          {pokemon.moves.slice(0, 5).map((move) => (
-            <Chip key={move.move.name} className="flex-grow" color="secondary">
+          {pokemon.moves.slice(0, 10).map((move) => (
+            <Chip key={move.move.name} className="capitalize" variant="flat">
               {move.move.name}
             </Chip>
           ))}
@@ -122,121 +90,102 @@ export const PokemonModal: React.FC<PokemonModalProps> = ({
     );
   };
 
-  console.log(pokemon.stats);
-
   return (
-    <Modal
-      className="max-h-[90vh]"
-      isOpen={isOpen}
-      motionProps={{
-        variants: {
-          enter: {
-            y: 0,
-            opacity: 1,
-            transition: {
-              duration: 0.3,
-              ease: "easeOut",
-            },
-          },
-          exit: {
-            y: -20,
-            opacity: 0,
-            transition: {
-              duration: 0.2,
-              ease: "easeIn",
-            },
-          },
-        },
-      }}
-      scrollBehavior="inside"
-      size="2xl"
-      onClose={onClose}
-    >
+    <Modal isOpen={isOpen} scrollBehavior="inside" size="2xl" onClose={onClose}>
       <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1 items-center">
-              <h2 className="text-2xl font-bold capitalize">{pokemon.name}</h2>
-            </ModalHeader>
-            <ModalBody>
-              <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-                <div className="w-full h-92 md:h-48 md:w-1/2 flex justify-center items-center">
-                  <img
-                    alt={pokemon.name}
-                    className="w-full h-full object-contain"
-                    src={pokemon.sprites.front_default}
-                  />
-                </div>
-                <div className="flex flex-col gap-2 w-full md:w-1/2">
-                  <p>
-                    <strong>Height:</strong>{" "}
-                    {pokemon.height ? `${pokemon.height / 10} m` : "Unknown"}
-                  </p>
-                  <p>
-                    <strong>Weight:</strong>{" "}
-                    {pokemon.weight ? `${pokemon.weight / 10} kg` : "Unknown"}
-                  </p>
-                  <p>
-                    <strong>Types:</strong>{" "}
-                    {pokemon.types.map((t) => t.type.name).join(", ")}
-                  </p>
-                  <p>
-                    <strong>Abilities:</strong>{" "}
-                    {pokemon.abilities?.map((a) => a.ability.name).join(", ") ||
-                      "Unknown"}
-                  </p>
-                  <div className="w-full">
-                    <strong className="text-lg mb-2 block">Stats:</strong>
-                    {pokemon.stats?.map((stat) => (
-                      <Tooltip
-                        key={stat.stat.name}
-                        content={`Base stat: ${stat.base_stat}`}
-                      >
-                        <div className="flex items-center justify-center mb-2">
-                          <div className="w-8 mr-2">
-                            {getStatIcon(stat.stat.name)}
-                          </div>
-                          <div className="flex-1">
-                            <p className="text-sm mb-1 capitalize">
-                              {stat.stat.name}
-                            </p>
-                            <Progress
-                              aria-label={`${stat.stat.name} stat`}
-                              classNames={{
-                                base: "max-w-md",
-                                indicator: `${getStatColor(stat.stat.name)} rounded-full`,
-                              }}
-                              color="default"
-                              maxValue={255}
-                              size="sm"
-                              value={stat.base_stat}
-                            />
-                          </div>
-                          <p className="text-sm flex items-center justify-center w-10 -mb-4">
-                            {stat.base_stat}
-                          </p>
-                        </div>
-                      </Tooltip>
-                    ))}
+        <ModalHeader className="flex flex-col gap-1">
+          <h2 className="text-2xl font-bold capitalize">{pokemon.name}</h2>
+        </ModalHeader>
+        <ModalBody>
+          <div className="flex flex-col items-center">
+            <img
+              alt={pokemon.name}
+              className="w-48 h-48 object-contain mb-4"
+              src={pokemon.sprites.front_default}
+            />
+            <div className="w-full">
+              <h3 className="text-xl font-semibold mb-2">Stats</h3>
+              {pokemon.stats?.map((stat) => (
+                <Tooltip
+                  key={stat.stat.name}
+                  content={`Base stat: ${stat.base_stat}`}
+                >
+                  <div className="flex items-center mb-2">
+                    <div className="w-8 mr-2">
+                      {getStatIcon(stat.stat.name)}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex justify-between mb-1">
+                        <span className="text-sm capitalize">
+                          {stat.stat.name}
+                        </span>
+                        <span className="text-sm font-semibold">
+                          {stat.base_stat}
+                        </span>
+                      </div>
+                      <Progress
+                        color={
+                          getStatColor(stat.stat.name) as
+                            | "default"
+                            | "danger"
+                            | "warning"
+                            | "success"
+                            | "secondary"
+                            | "primary"
+                        }
+                        maxValue={255}
+                        size="sm"
+                        value={stat.base_stat}
+                      />
+                    </div>
                   </div>
-                  {renderEvolutionChain()}
-                </div>
+                </Tooltip>
+              ))}
+            </div>
+            <div className="w-full mt-4">
+              <h3 className="text-xl font-semibold mb-2">Types</h3>
+              <div className="flex gap-2">
+                {pokemon.types.map((type) => (
+                  <Chip
+                    key={type.type.name}
+                    className="capitalize"
+                    color="primary"
+                  >
+                    {type.type.name}
+                  </Chip>
+                ))}
               </div>
-              {renderMoves()}
-            </ModalBody>
-            <ModalFooter>
-              <Button color="danger" onPress={onClose}>
-                Close
-              </Button>
-              {/* <Button
-                color="primary"
-                onPress={() => window.open(`/pokemon/${pokemon.id}`, '_blank')}
-              >
-                View Full Details
-              </Button> */}
-            </ModalFooter>
-          </>
-        )}
+            </div>
+            <div className="w-full mt-4">
+              <h3 className="text-xl font-semibold mb-2">Abilities</h3>
+              <div className="flex flex-wrap gap-2">
+                {pokemon.abilities?.map((ability) => (
+                  <Chip
+                    key={ability.ability.name}
+                    className="capitalize"
+                    color={ability.is_hidden ? "secondary" : "default"}
+                    variant="flat"
+                  >
+                    {ability.ability.name}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            {renderMoves()}
+            <div className="w-full mt-4 flex items-center">
+              <InfoIcon className="mr-2" />
+              <span className="text-sm">
+                Height: {pokemon.height ? `${pokemon.height / 10}m` : "N/A"} |
+                Weight: {pokemon.weight ? `${pokemon.weight / 10}kg` : "N/A"}
+              </span>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="danger" variant="light" onPress={onClose}>
+            Close
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );

@@ -44,7 +44,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div className="flex items-center gap-2">
       <Autocomplete
-        className="max-w-xs"
+        className="w-full"
         errorMessage={error}
         inputValue={inputValue}
         isLoading={isLoading}
@@ -63,8 +63,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           </AutocompleteItem>
         ))}
       </Autocomplete>
-      <Button color="secondary" onClick={onReset}>
-        Reset
+      <Button color="primary" onClick={onReset}>
+        Clear
       </Button>
     </div>
   );

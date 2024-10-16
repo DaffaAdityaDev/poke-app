@@ -37,10 +37,6 @@ const PokemonCompare: React.FC = () => {
     selectedPokemon2 || "",
   );
 
-  // const handleCompare = useCallback(() => {
-  //   // Trigger comparison or any additional logic if needed
-  // }, []);
-
   const renderPokemonDetails = useCallback(
     (pokemon: PokemonDetails | null, error: any, isSelected: boolean) => {
       if (!isSelected) {

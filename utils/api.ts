@@ -1,4 +1,4 @@
-export const API_BASE_URL = "https://pokeapi.co/api/v2";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_POKE_API_BASE_URL || "https://pokeapi.co/api/v2";
 
 export class ApiError extends Error {
   constructor(

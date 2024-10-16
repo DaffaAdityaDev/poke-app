@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
+
 import { PokemonAbility } from "@/types/pokemon";
-import { useSWRConfig } from "@/lib/hooks/useSWRConfig";
 import { ApiError } from "@/types/api";
 
 const API_BASE_URL = "https://pokeapi.co/api/v2";
@@ -10,60 +10,81 @@ export const usePokemonAbilities = (
   searchQuery: string,
   currentPage: number,
 ) => {
-  const { data, error } = useSWRConfig<{ results: { name: string; url: string }[], count: number }, ApiError>(
-    `/ability?limit=1000`, // Fetch all abilities at once
-    {
-      onError: (error) => {
-        console.error("API error:", error);
-        return error instanceof Error
-          ? { message: error.message }
-          : { message: "An unknown error occurred" };
-      },
-    }
-  );
-
   const [abilities, setAbilities] = useState<PokemonAbility[]>([]);
+  const [totalAbilities, setTotalAbilities] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<ApiError | null>(null);
+
+  const fetchAbilities = useCallback(async (page: number) => {
+    const offset = (page - 1) * ITEMS_PER_PAGE;
+    const url = `/ability?limit=${ITEMS_PER_PAGE}&offset=${offset}`;
+
+    try {
+      const response = await fetch(`${API_BASE_URL}${url}`);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch abilities: ${response.status}`);
+      }
+      const data = await response.json();
+
+      setTotalAbilities(data.count);
+
+      const abilitiesDetails = await Promise.all(
+        data.results.map(async (ability: { url: string }) => {
+          const abilityResponse = await fetch(ability.url);
+
+          if (!abilityResponse.ok) {
+            throw new Error(
+              `Failed to fetch ability details: ${abilityResponse.status}`,
+            );
+          }
+
+          return abilityResponse.json();
+        }),
+      );
+
+      return abilitiesDetails;
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? { name: "FetchError", message: error.message }
+          : { name: "UnknownError", message: "An unknown error occurred" },
+      );
+
+      return [];
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchAbilityDetails = async () => {
-      if (data) {
-        setIsLoading(true);
-        const abilitiesDetails = await Promise.all(
-          data.results.map(async (ability) => {
-            const response = await fetch(ability.url);
-            if (!response.ok) {
-              throw new Error(`Failed to fetch ability details: ${response.status}`);
-            }
-            return response.json();
-          })
-        );
-        setAbilities(abilitiesDetails);
-        setIsLoading(false);
-      }
+    const loadAbilities = async () => {
+      setIsLoading(true);
+      const fetchedAbilities = await fetchAbilities(currentPage);
+
+      setAbilities(fetchedAbilities);
+      setIsLoading(false);
     };
 
-    fetchAbilityDetails();
-  }, [data]);
+    loadAbilities();
+  }, [fetchAbilities, currentPage]);
 
   const filteredAbilities = useMemo(() => {
     return abilities.filter((ability) =>
-      ability.name.toLowerCase().includes(searchQuery.toLowerCase())
+      ability.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [abilities, searchQuery]);
 
-  const paginatedAbilities = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredAbilities.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredAbilities, currentPage]);
+  const totalFilteredAbilities = useMemo(() => {
+    return searchQuery ? filteredAbilities.length : totalAbilities;
+  }, [searchQuery, filteredAbilities, totalAbilities]);
 
-  const totalPages = Math.ceil(filteredAbilities.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(totalFilteredAbilities / ITEMS_PER_PAGE);
 
   return {
-    abilities: paginatedAbilities,
+    abilities: filteredAbilities,
     isLoading,
-    error: error ? { message: error.message || "Failed to fetch abilities" } : null,
+    error,
+    currentPage,
     totalPages,
-    totalAbilities: filteredAbilities.length,
+    totalAbilities: totalFilteredAbilities,
   };
 };

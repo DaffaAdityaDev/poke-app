@@ -15,10 +15,11 @@ import { ApiError } from "@/types/api";
 
 const DEBOUNCE_TIME = 300;
 const MAX_SUGGESTIONS = 10;
-const MIN_SEARCH_LENGTH = 2;
+const MIN_SEARCH_LENGTH = 0;
 
 export const useAutocomplete = (initialValue: string = "") => {
-  const [inputValue, setInputValue] = useState(initialValue);
+  const [immediateInputValue, setImmediateInputValue] = useState(initialValue);
+  const [debouncedInputValue, setDebouncedInputValue] = useState(initialValue);
   const [suggestions, setSuggestions] = useState<PokemonListItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,35 +71,39 @@ export const useAutocomplete = (initialValue: string = "") => {
         distinctUntilChanged(),
         tap(() => setIsLoading(true)),
         switchMap(searchPokemon),
-        catchError((error: ApiError) => {
-          setError(error.message);
+        catchError((error) => {
+          setError("An error occurred while fetching suggestions.");
+          console.error("Search error:", error);
 
           return of([]);
         }),
       )
-      .subscribe({
-        next: (results) => {
-          setSuggestions(results);
-          setIsLoading(false);
-          setError(null);
-        },
-        error: (err) => {
-          console.error("Search error:", err);
-          setIsLoading(false);
-          setError("An unexpected error occurred. Please try again.");
-        },
+      .subscribe((results) => {
+        setSuggestions(results);
+        setIsLoading(false);
       });
 
     return () => subscription.unsubscribe();
   }, [searchPokemon]);
 
+  useEffect(() => {
+    searchSubject.current.next(debouncedInputValue);
+  }, [debouncedInputValue]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedInputValue(immediateInputValue);
+    }, DEBOUNCE_TIME);
+
+    return () => clearTimeout(timer);
+  }, [immediateInputValue]);
+
   const handleInputChange = useCallback((value: string) => {
-    setInputValue(value);
-    searchSubject.current.next(value);
+    setImmediateInputValue(value);
   }, []);
 
   return {
-    inputValue,
+    inputValue: immediateInputValue,
     setInputValue: handleInputChange,
     suggestions,
     isLoading,

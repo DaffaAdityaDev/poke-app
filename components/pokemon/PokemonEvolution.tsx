@@ -90,7 +90,7 @@ const PokemonEvolution: React.FC = () => {
     <div className="w-full max-w-4xl mx-auto px-4">
       <Card className="mb-8">
         <CardBody>
-          <div className="flex flex-col justify-center items-center h sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <Autocomplete
               className="flex-grow"
               errorMessage={searchError?.message || error}
@@ -111,7 +111,7 @@ const PokemonEvolution: React.FC = () => {
               ))}
             </Autocomplete>
             <Button
-              className="mt-2 sm:mt-0 "
+              className="mt-2 sm:mt-0"
               color="primary"
               onClick={handleClear}
             >

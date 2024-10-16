@@ -24,6 +24,7 @@ export interface PokemonDetails {
   height?: number;
   weight?: number;
   abilities?: {
+    [x: string]: any;
     ability: {
       name: string;
     };
