@@ -26,11 +26,12 @@ To get started with this project, follow these steps:
    ```
 
 3. Create a `.env` file in the root directory and add the following:
+   - check .env.example and replace with your own API base url or visit https://pokeapi.co/docs/v2
    ```bash
-   NEXT_PUBLIC_POKE_API_BASE_URL=YOUR_POKE_API_BASE_URL (check .env.example and replace with your own API base url or visit https://pokeapi.co/docs/v2)
+   NEXT_PUBLIC_POKE_API_BASE_URL=YOUR_POKE_API_BASE_URL
    ```
 
-4. Run the development server:
+5. Run the development server:
    ```bash
    npm run dev
    ```
