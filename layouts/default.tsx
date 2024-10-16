@@ -17,15 +17,28 @@ export default function DefaultLayout({
         {children}
       </main>
       <footer className="w-full flex items-center justify-center py-3">
-        <Link
-          isExternal
-          className="flex items-center gap-1 text-current"
-          href="https://nextui-docs-v2.vercel.app?utm_source=next-pages-template"
-          title="nextui.org homepage"
-        >
-          <span className="text-default-600">Powered by</span>
-          <p className="text-primary">NextUI</p>
-        </Link>
+        <div className="text-center">
+          <p className="text-sm text-gray-500">
+            Created by{" "}
+            <Link
+              isExternal
+              className="text-primary hover:underline"
+              href="https://github.com/DaffaAdityaDev"
+            >
+              Daffa Aditya Rahman
+            </Link>
+          </p>
+          <p className="text-xs text-gray-400 mt-1">
+            Powered by{" "}
+            <Link
+              isExternal
+              className="text-primary hover:underline"
+              href="https://nextui.org"
+            >
+              NextUI
+            </Link>
+          </p>
+        </div>
       </footer>
     </div>
   );

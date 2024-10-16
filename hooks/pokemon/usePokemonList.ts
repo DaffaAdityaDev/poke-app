@@ -12,8 +12,21 @@ export const usePokemonList = (currentPage: number, searchQuery: string) => {
     searchQuery
       ? `/pokemon/${searchQuery.toLowerCase()}`
       : `/pokemon?limit=${ITEMS_PER_PAGE}&offset=${(currentPage - 1) * ITEMS_PER_PAGE}`,
-    { onError: (error) => console.error("API error:", error) },
+    {
+      onError: (error) => {
+        console.error("API error:", error);
+
+        return error instanceof Error
+          ? { message: error.message }
+          : { message: "An unknown error occurred" };
+      },
+    },
   );
 
-  return { listData, listError };
+  return {
+    listData,
+    listError: listError
+      ? { message: listError.message || "Failed to fetch Pokémon list" }
+      : null,
+  };
 };

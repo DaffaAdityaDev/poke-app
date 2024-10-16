@@ -2,19 +2,22 @@ import { useState, useEffect, useCallback } from "react";
 
 import { PokemonListItem } from "@/types/pokemon";
 import { getPokemonList } from "@/lib/api/pokeapi";
+import { ApiError } from "@/types/api";
 
 const ITEMS_PER_PAGE = 20;
 
-const useSearchPokemon = (currentPage: number) => {
+const useSearchPokemon = () => {
   const [inputValue, setInputValue] = useState("");
   const [items, setItems] = useState<PokemonListItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<ApiError | null>(null);
 
   const debouncedSearch = useCallback(
     debounce((value: string) => {
       if (value.length > 0) {
         setIsLoading(true);
-        getPokemonList(1000, 0, value) // Fetch more results to filter
+        setError(null);
+        getPokemonList(1000, 0)
           .then((data) => {
             const filteredResults = data.results.filter((pokemon) =>
               pokemon.name.toLowerCase().includes(value.toLowerCase()),
@@ -23,12 +26,14 @@ const useSearchPokemon = (currentPage: number) => {
             setItems(filteredResults.slice(0, ITEMS_PER_PAGE));
             setIsLoading(false);
           })
-          .catch(() => {
+          .catch((err: ApiError) => {
             setItems([]);
             setIsLoading(false);
+            setError(err);
           });
       } else {
         setItems([]);
+        setError(null);
       }
     }, 300),
     [],
@@ -43,6 +48,7 @@ const useSearchPokemon = (currentPage: number) => {
     setInputValue,
     items,
     isLoading,
+    error,
   };
 };
 

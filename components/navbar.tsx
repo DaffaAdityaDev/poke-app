@@ -13,7 +13,6 @@ import NextLink from "next/link";
 import clsx from "clsx";
 
 import { ThemeSwitch } from "@/components/theme-switch";
-import { Logo } from "@/components/icons";
 
 const navItems = [
   { label: "Pokédex", href: "/" },
@@ -29,11 +28,10 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
-            <Logo />
             <p className="font-bold text-inherit">Poké App</p>
           </NextLink>
         </NavbarBrand>
-        <div className="hidden lg:flex gap-4 justify-start ml-2">
+        <div className="hidden sm:flex gap-4 justify-start ml-2">
           {navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
@@ -51,9 +49,11 @@ export const Navbar = () => {
         </div>
       </NavbarContent>
 
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <ThemeSwitch />
-        <NavbarMenuToggle />
+      <NavbarContent className="sm:flex basis-1/5 sm:basis-full" justify="end">
+        <NavbarItem>
+          <ThemeSwitch />
+        </NavbarItem>
+        <NavbarMenuToggle className="sm:hidden" />
       </NavbarContent>
 
       <NavbarMenu>

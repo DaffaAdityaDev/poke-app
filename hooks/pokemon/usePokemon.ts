@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 import { useSearchQuery } from "../search/useSearchQuery";
 import { usePagination } from "../usePagination";
@@ -21,12 +21,22 @@ export function usePokemon() {
     searchQuery,
   );
   const { getErrorMessage } = useErrorHandling(
-    listError,
-    detailsError,
+    listError ? { name: "ListError", message: listError.message } : null,
+    detailsError
+      ? { name: "DetailsError", message: detailsError.message }
+      : null,
     searchQuery,
   );
 
   const isLoading = !listData || !pokemonDetails;
+
+  const effectiveTotalPages = useMemo(() => {
+    if (searchQuery) {
+      return 1; // When searching, we only have one page of results
+    }
+
+    return totalPages;
+  }, [searchQuery, totalPages]);
 
   useEffect(() => {
     if (listData) {
@@ -34,12 +44,18 @@ export function usePokemon() {
     }
   }, [listData, handlePageChange, currentPage]);
 
+  useEffect(() => {
+    if (searchQuery) {
+      handlePageChange(1, 1); // Reset to first page when searching
+    }
+  }, [searchQuery, handlePageChange]);
+
   return {
     pokemonList: pokemonDetails || [],
     isLoading,
     error: getErrorMessage(),
     currentPage,
-    totalPages,
+    totalPages: effectiveTotalPages,
     searchQuery,
     handleSearch,
     handlePageChange,

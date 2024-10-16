@@ -20,8 +20,10 @@ export function usePokemon() {
     searchQuery,
   );
   const { getErrorMessage } = useErrorHandling(
-    listError,
-    detailsError,
+    listError ? { name: "ListError", message: listError.message } : null,
+    detailsError
+      ? { name: "DetailsError", message: detailsError.message }
+      : null,
     searchQuery,
   );
 
