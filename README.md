@@ -120,9 +120,9 @@ The project follows a standard Next.js structure with some additional organizati
 
 ## Key Features
 
-- Pokédex with pagination and search functionality
-- Detailed Pokémon information pages
-- Pokémon comparison tool
+- Pokedex with pagination and search functionality
+- Detailed Pokemon information pages
+- Pokemon comparison tool
 - Type effectiveness chart
 - Evolution chain viewer
 - Ability explorer
