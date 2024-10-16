@@ -143,6 +143,36 @@ Our testing approach ensures code quality and reliability:
 - End-to-end tests for critical user journeys
 - Continuous Integration (CI) to run tests on every pull request
 
+## Running Tests
+
+This project uses Jest and React Testing Library for unit and integration testing. To run the tests, follow these steps:
+
+1. Ensure you have installed all dependencies by running `npm install` in the project root directory.
+
+2. To run all tests, use the following command:
+   ```bash
+   npm test
+   ```
+
+3. To run a specific test file, use the following command:
+   ```bash
+   npm test -- path/to/your/test/file.test.ts
+   ```
+
+4. To run tests in watch mode (tests will re-run automatically when files change), use:
+   ```bash
+   npm test -- --watch
+   ```
+
+5. To see test coverage, run:
+   ```bash
+   npm test -- --coverage
+   ```
+
+The test files are located in the `__tests__` directory and follow the naming convention of `*.test.ts` or `*.test.tsx`.
+
+For more information on writing and running tests, refer to the [Jest documentation](https://jestjs.io/docs/getting-started) and [React Testing Library documentation](https://testing-library.com/docs/react-testing-library/intro/).
+
 ## Deployment
 
 The application is on Vercel, For deployment instructions, refer to the [Vercel documentation](https://vercel.com/docs).
